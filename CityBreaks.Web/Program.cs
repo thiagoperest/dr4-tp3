@@ -1,7 +1,14 @@
+using CityBreaks.Web.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Add Entity Framework
+builder.Services.AddDbContext<CityBreaksContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
@@ -14,13 +21,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-app.MapRazorPages()
-    .WithStaticAssets();
+app.MapRazorPages();
 
 app.Run();
