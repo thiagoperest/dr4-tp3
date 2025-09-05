@@ -12,6 +12,7 @@ namespace CityBreaks.Web.Data
 
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Property> Properties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,9 +31,23 @@ namespace CityBreaks.Web.Data
 
                 // Relacionamento 1:N
                 entity.HasOne(c => c.Country)
-                    .WithMany(co => co.Cities)
-                    .HasForeignKey(c => c.CountryId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                      .WithMany(co => co.Cities)
+                      .HasForeignKey(c => c.CountryId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Property>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.PricePerNight).IsRequired().HasColumnType("decimal(18,2)");
+                entity.Property(e => e.CityId).IsRequired();
+
+                // Relacionamento 1:N
+                entity.HasOne(p => p.City)
+                      .WithMany(c => c.Properties)
+                      .HasForeignKey(p => p.CityId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

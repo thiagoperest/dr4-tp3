@@ -16,5 +16,7 @@ namespace CityBreaks.Web.Model
         
         [ForeignKey("CountryId")]
         public Country Country { get; set; } = null!;
+
+        public List<Property> Properties { get; set; } = new List<Property>();
     }
 }
