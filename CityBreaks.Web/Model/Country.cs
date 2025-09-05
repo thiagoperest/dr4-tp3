@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CityBreaks.Web.Models
+namespace CityBreaks.Web.Model
 {
     public class Country
     {
@@ -13,5 +13,7 @@ namespace CityBreaks.Web.Models
         [Required]
         [StringLength(100)]
         public string CountryName { get; set; } = string.Empty;
+        
+        public List<City> Cities { get; set; } = new List<City>();
     }
 }
