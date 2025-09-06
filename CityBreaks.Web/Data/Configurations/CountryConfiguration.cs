@@ -19,6 +19,15 @@ namespace CityBreaks.Web.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(100)
                 .HasColumnName("CountryName");
+
+            // Seed Data
+            builder.HasData(
+                new Country { Id = 1, CountryCode = "BR", CountryName = "Brasil" },
+                new Country { Id = 2, CountryCode = "PT", CountryName = "Portugal" },
+                new Country { Id = 3, CountryCode = "FR", CountryName = "França" },
+                new Country { Id = 4, CountryCode = "IT", CountryName = "Itália" },
+                new Country { Id = 5, CountryCode = "ES", CountryName = "Espanha" }
+            );
         }
     }
 }
