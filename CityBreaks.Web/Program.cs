@@ -1,5 +1,4 @@
 using CityBreaks.Web.Data;
-using CityBreaks.Web.Data.Configurations;
 using CityBreaks.Web.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +13,7 @@ builder.Services.AddDbContext<CityBreaksContext>(options =>
 
 // Injeção de Dependência das classes Serives
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IPropertyService, PropertyService>();
 
 var app = builder.Build();
 

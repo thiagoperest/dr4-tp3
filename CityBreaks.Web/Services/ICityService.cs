@@ -1,4 +1,5 @@
 using CityBreaks.Web.Model;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CityBreaks.Web.Services
 {
@@ -6,5 +7,6 @@ namespace CityBreaks.Web.Services
     {
         Task<List<City>> GetAllAsync();
         Task<City?> GetByNameAsync(string name);
+        Task<SelectList> GetCitiesSelectListAsync();
     }
 }
