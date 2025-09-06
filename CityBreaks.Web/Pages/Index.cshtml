@@ -1,10 +1,95 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "CityBreaks - Destinos Turísticos";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Bem-vindo ao CityBreaks</h1>
+    <p class="lead">Descubra os melhores destinos turísticos e propriedades para sua próxima viagem!</p>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h2>Cidades</h2>
+        
+        @if (Model.Cities.Any())
+        {
+            <div class="row">
+                @foreach (var city in Model.Cities)
+                {
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">
+                                    @city.Name
+                                </h5>
+                                <small>@city.Country.CountryName (@city.Country.CountryCode)</small>
+                            </div>
+                            <div class="card-body">
+                                @if (city.Properties.Any())
+                                {
+                                    <h6>Propriedades Disponíveis (@city.Properties.Count):</h6>
+                                    <ul class="list-unstyled">
+                                        @foreach (var property in city.Properties.Take(3))
+                                        {
+                                            <li class="mb-2">
+                                                <strong>@property.Name</strong><br>
+                                                <span class="text-success">@property.PricePerNight.ToString("C") / noite</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                    
+                                    @if (city.Properties.Count > 3)
+                                    {
+                                        <small class="text-muted">... e mais @(city.Properties.Count - 3) propriedades</small>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Nenhuma propriedade disponível ainda.</p>
+                                }
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">
+                                    Total de propriedades: @city.Properties.Count
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <h4>Nenhuma cidade encontrada</h4>
+                <p>Ainda não há cidades cadastradas no sistema.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5>Estatísticas</h5>
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h3 class="text-primary">@Model.Cities.Select(c => c.Country).Distinct().Count()</h3>
+                        <p>Países</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="text-success">@Model.Cities.Count</h3>
+                        <p>Cidades</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="text-info">@Model.Cities.SelectMany(c => c.Properties).Count()</h3>
+                        <p>Propriedades</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
