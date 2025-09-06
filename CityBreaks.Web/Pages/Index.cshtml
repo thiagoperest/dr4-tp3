@@ -22,7 +22,9 @@
                         <div class="card h-100">
                             <div class="card-header bg-primary text-white">
                                 <h5 class="card-title mb-0">
-                                    @city.Name
+                                    <a asp-page="/CityDetails" asp-route-name="@city.Name" class="text-white text-decoration-none">
+                                        @city.Name
+                                    </a>
                                 </h5>
                                 <small>@city.Country.CountryName (@city.Country.CountryCode)</small>
                             </div>

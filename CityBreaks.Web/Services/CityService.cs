@@ -20,5 +20,13 @@ namespace CityBreaks.Web.Services
                 .Include(c => c.Properties)
                 .ToListAsync();
         }
+
+        public async Task<City?> GetByNameAsync(string name)
+        {
+            return await _context.Cities
+                .Include(c => c.Country)
+                .Include(c => c.Properties)
+                .FirstOrDefaultAsync(c => EF.Functions.Collate(c.Name, "NOCASE") == name);
+        }
     }
 }
