@@ -91,5 +91,37 @@ namespace CityBreaks.Web.Services
                 .Where(p => p.DeletedAt != null)
                 .ToListAsync();
         }
+
+        public async Task<List<Property>> GetFilteredAsync(decimal? minPrice, decimal? maxPrice, string? cityName, string? propertyName)
+        {
+            var query = _context.Properties
+                .Include(p => p.City)
+                .ThenInclude(c => c.Country)
+                .AsQueryable();
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.PricePerNight >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.PricePerNight <= maxPrice.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(cityName))
+            {
+                query = query.Where(p => EF.Functions.Collate(p.City.Name, "NOCASE").Contains(cityName));
+            }
+            
+            if (!string.IsNullOrWhiteSpace(propertyName))
+            {
+                query = query.Where(p => EF.Functions.Collate(p.Name, "NOCASE").Contains(propertyName));
+            }
+
+            var results = await query.ToListAsync();
+
+            return results.OrderBy(p => p.PricePerNight).ToList();
+        }
     }
 }
