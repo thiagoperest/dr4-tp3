@@ -1,0 +1,141 @@
+@page "/city/{name}"
+@model CityDetailsModel
+@{
+    ViewData["Title"] = Model.City?.Name ?? "Cidade não encontrada";
+}
+
+@if (Model.CityNotFound)
+{
+    <div class="container mt-4">
+        <div class="alert alert-warning">
+            <h4>Cidade não encontrada</h4>
+            <p>A cidade solicitada não foi encontrada em nossa base de dados.</p>
+            <a asp-page="/Index" class="btn btn-primary">Voltar à página inicial</a>
+        </div>
+    </div>
+}
+else if (Model.City != null)
+{
+    <div class="container mt-4">
+        
+        <!-- Mensagens de sucesso/erro -->
+        @if (!string.IsNullOrEmpty((string)TempData["SuccessMessage"]))
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty((string)TempData["ErrorMessage"]))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-page="/Index">Início</a></li>
+                        <li class="breadcrumb-item active">@Model.City.Name</li>
+                    </ol>
+                </nav>
+
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h1 class="display-4 mb-0">@Model.City.Name</h1>
+                        <p class="lead mb-0">@Model.City.Country.CountryName (@Model.City.Country.CountryCode)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h2>Propriedades Disponíveis</h2>
+
+                @if (Model.City.Properties.Any())
+                {
+                    <p class="text-muted mb-4">
+                        Encontramos @Model.City.Properties.Count propriedade(s) disponível(is) em @Model.City.Name
+                    </p>
+
+                    <div class="row">
+                        @foreach (var property in Model.City.Properties)
+                        {
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@property.Name</h5>
+                                        <p class="card-text text-muted">@Model.City.Name, @Model.City.Country.CountryName</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="h5 text-success mb-0">
+                                                @property.PricePerNight.ToString("C") / noite
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a asp-page="/EditProperty" asp-route-id="@property.Id" class="btn btn-warning btn-sm">Editar</a>
+                                        <form method="post" asp-page="/DeleteProperty" asp-route-id="@property.Id" class="d-inline" 
+                                              onsubmit="return confirm('Tem certeza que deseja excluir a propriedade \'@property.Name\'?')">
+                                            <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                        </form>
+                                        <button class="btn btn-outline-secondary btn-sm">Favoritar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <h4>Nenhuma propriedade disponível</h4>
+                        <p>Infelizmente, não há propriedades cadastradas para @Model.City.Name no momento.</p>
+                        <p>Volte em breve para conferir novas opções!</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (Model.City.Properties.Any())
+        {
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5>Estatísticas de @Model.City.Name</h5>
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <h3 class="text-primary">@Model.City.Properties.Count</h3>
+                                    <p>Propriedades</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h3 class="text-success">@Model.City.Properties.Min(p => p.PricePerNight).ToString("C")</h3>
+                                    <p>Menor Preço</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h3 class="text-info">@Model.City.Properties.Max(p => p.PricePerNight).ToString("C")</h3>
+                                    <p>Maior Preço</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h3 class="text-warning">@Model.City.Properties.Average(p => p.PricePerNight).ToString("C")</h3>
+                                    <p>Preço Médio</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <a asp-page="/Index" class="btn btn-secondary">Voltar à página inicial</a>
+            </div>
+        </div>
+    </div>
+}

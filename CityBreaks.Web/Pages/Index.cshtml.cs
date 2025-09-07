@@ -1,18 +1,23 @@
-using Microsoft.AspNetCore.Mvc;
+using CityBreaks.Web.Model;
+using CityBreaks.Web.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CityBreaks.Web.Pages;
-
-public class IndexModel : PageModel
+namespace CityBreaks.Web.Pages
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    public class IndexModel : PageModel
     {
-        _logger = logger;
-    }
+        private readonly ICityService _cityService;
 
-    public void OnGet()
-    {
+        public IndexModel(ICityService cityService)
+        {
+            _cityService = cityService;
+        }
+
+        public List<City> Cities { get; set; } = new List<City>();
+
+        public async Task OnGetAsync()
+        {
+            Cities = await _cityService.GetAllAsync();
+        }
     }
 }
