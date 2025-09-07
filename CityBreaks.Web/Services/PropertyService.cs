@@ -55,5 +55,41 @@ namespace CityBreaks.Web.Services
                 return false;
             }
         }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                var property = await _context.Properties.FindAsync(id);
+                if (property == null)
+                    return false;
+
+                property.DeletedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<Property>> GetAllAsync()
+        {
+            return await _context.Properties
+                .Include(p => p.City)
+                .ThenInclude(c => c.Country)
+                .ToListAsync();
+        }
+
+        public async Task<List<Property>> GetDeletedAsync()
+        {
+            return await _context.Properties
+                .IgnoreQueryFilters()
+                .Include(p => p.City)
+                .ThenInclude(c => c.Country)
+                .Where(p => p.DeletedAt != null)
+                .ToListAsync();
+        }
     }
 }

@@ -24,6 +24,11 @@ namespace CityBreaks.Web.Data.Configurations
                 .IsRequired()
                 .HasColumnName("CityId");
 
+            builder.Property(e => e.DeletedAt)
+                   .HasColumnName("DeletedAt");
+
+            builder.HasQueryFilter(p => p.DeletedAt == null);
+
             // Relacionamento 1:N
             builder.HasOne(p => p.City)
                 .WithMany(c => c.Properties)

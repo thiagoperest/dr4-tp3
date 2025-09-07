@@ -7,5 +7,6 @@ namespace CityBreaks.Web.Services
         Task<bool> CreateAsync(Property property);
         Task<Property?> GetByIdAsync(int id);
         Task<bool> UpdateAsync(int id, string name, decimal pricePerNight, int cityId);
+        Task<bool> DeleteAsync(int id);
     }
 }
