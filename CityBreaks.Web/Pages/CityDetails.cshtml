@@ -60,7 +60,7 @@ else if (Model.City != null)
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn btn-primary btn-sm">Ver Detalhes</button>
+                                        <a asp-page="/EditProperty" asp-route-id="@property.Id" class="btn btn-warning btn-sm">Editar</a>
                                         <button class="btn btn-outline-secondary btn-sm">Favoritar</button>
                                     </div>
                                 </div>
